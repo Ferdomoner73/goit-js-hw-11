@@ -14,7 +14,7 @@ window.addEventListener('scroll', throttle(500, (e) => {
 
     if (scrollTop + clientHeight >= scrollHeight - 10 && !isLoading) {
         processingRecievedMessage(e);
-    }
+    } 
 }));
 
 const API_KEY = '38006870-c016c2a85f82fa326eab38f53';
@@ -29,7 +29,7 @@ async function getImages(query) {
         const response = await fetch(url);
         const data = await response.json();
 
-        if (currentPage === 1) {
+        if (currentPage === 1 && data.hits.length) {
             Notiflix.Notify.success(`Hooray! We found ${data.totalHits} images.`);
         }
 
@@ -37,9 +37,9 @@ async function getImages(query) {
         return data.hits;
     } catch (error) {
         console.log(error);
-        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
     }
 }
+
 
 function checkCurrentValue(value) {
     
@@ -55,18 +55,20 @@ function checkCurrentValue(value) {
 
 async function processingRecievedMessage(e) {
     e.preventDefault();
-
-    
     const queryValue = inputEl.value;
 
     try {
-        const images = await getImages(queryValue);
+        const images = await getImages(queryValue);      
+
+        if (images === undefined) {
+            showNoMoreImagesMessage();
+        }
         
         if (images.length > 0) {
             displayImages(images);
-        } else {
+        }  else {
             showNoImagesMessage();
-        }
+        } 
     } catch (error) {
         console.log(error);
     }
@@ -76,8 +78,11 @@ function showNoImagesMessage() {
     Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
 }
 
+function showNoMoreImagesMessage() {
+    Notiflix.Notify.failure(`We're sorry, but you've reached the end of search results.`);
+}
+
 function displayImages(images) {
-    console.dir(images);
     const allImgs = images.map(image => {
         return `<div class="photo-card">
         <img src="${image.webformatURL}" alt="${image.tags}" loading="lazy" />

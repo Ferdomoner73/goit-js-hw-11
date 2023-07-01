@@ -7,6 +7,33 @@
     <link rel="stylesheet" href="./sass/index.scss" />
   </head>
   <body>
+    <header class="header">
+      <div class="container">
+        <form class="search-form" id="search-form">
+          <label for="site-search"></label>
+          <div class="search-item">
+            <input
+              type="text"
+              name="searchQuery"
+              autocomplete="off"
+              placeholder="Search images..."
+            />
+            <button class="button-search" type="submit">
+              <svg class="search-icon" height="15" width="15">
+                <use href="./img/symbol-defs.svg#icon-search"></use>
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </header>
+
+    <section class="galary-section">
+      <div class="container">
+        <div class="gallery"></div>
+      </div>
+    </section>
+
     <script type="module" src="./index.js"></script>
   </body>
 </html>
